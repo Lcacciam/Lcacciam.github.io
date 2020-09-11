@@ -13,10 +13,11 @@
         <script src="jspsych-6.0.5/plugins/jspsych-fullscreen.js"></script>
         <script src="jspsych-6.0.5/plugins/jspsych-video.js"></script>
         <link href="jspsych-6.0.5/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+        <script src="jatos.js"></script>`
 
     </head>
-
-    <body></body>
+    <body>
+    </body>
 	<script>
 
 	    /* create timeline */
@@ -25,7 +26,7 @@
 	    /* define welcome message trial */
 	    var welcome = {
 	      type: "html-keyboard-response",
-	      stimulus: "Welcome to the experiment."
+	      stimulus: "<p style=text-align:center>Welcome to the experiment.</p>"
 	    };
 		timeline.push(welcome);
 		
@@ -162,15 +163,18 @@
 	    timeline.push(debrief_block);
 
 	    /* start the experiment */
-	    jsPsych.init({
+	    jatos.onLoad(function(){
+	    	jsPsych.init({
                      timeline: timeline,
                      preload_audio: audio,
                      preload_images: images,
                      show_preload_progress_bar: false,
                      use_webaudio: false,
                      on_finish: function() {
-                        jsPsych.data.get().localSave('csv','Block1.csv');
-	      }
+                     	var resultData = jsPsych.data.get().filter({test_part: 'test_trial'}).csv();
+                     	jatos.submitResultData(resultData, jatos.startNextcomponent);
+	     	 }
+	   	 });
 	    });
 
 		
